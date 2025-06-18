@@ -1,7 +1,7 @@
 package com.sjp.flow;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +33,7 @@ public class FlowService {
 		else {
             FlowEntity newEntity = FlowEntity.builder()
                                              .extensionName(newExtension)
+                                             .type(FlowExtensionType.CUSTOM)
                                              .build();
 			flowRepository.save(newEntity);
 		}
@@ -45,16 +46,19 @@ public class FlowService {
         }
     }
 
-    public void removeExtension(List<String> extensions) {
-        List<FlowEntity> extensionList = new ArrayList<FlowEntity>();
-        for (String extension : extensions) {
-            FlowEntity toRemoveExtensions = flowRepository.findByExtensionName(extension).orElseThrow(() -> new CustomException(CustomErrorCode.EXTENSION_NOT_FOUND));
-            extensionList.add(toRemoveExtensions);
+    public void removeExtension(String extension) {
+        FlowEntity toRemoveExtensions = flowRepository.findByExtensionName(extension).orElseThrow(() -> new CustomException(CustomErrorCode.EXTENSION_NOT_FOUND));
+        if (toRemoveExtensions.getType() != FlowExtensionType.CUSTOM) {
+            throw new CustomException(CustomErrorCode.INAPPROPIRATE_EXTENSION_TYPE);
         }
-        flowRepository.deleteAll(extensionList);
+        flowRepository.delete(toRemoveExtensions);
     }
-
-    // public void addFixedExtension() {
+    
+    public List<String> getCustomExtension() {
+       return flowRepository.findByType(FlowExtensionType.CUSTOM).stream()
+                .map(FlowEntity::getExtensionName)
+                .collect(Collectors.toList());
+    }
     //     fixedExtensions.add("bat");
     //     fixedExtensions.add("cmd");
     //     fixedExtensions.add("com");
@@ -62,7 +66,6 @@ public class FlowService {
     //     fixedExtensions.add("exe");
     //     fixedExtensions.add("scr");
     //     fixedExtensions.add("js");
-    // }
 
     public List<FlowEntity> getExtensionLists() {
         List<FlowEntity> ExtensionLists = flowRepository.findAll();
