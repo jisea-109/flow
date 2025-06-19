@@ -24,7 +24,6 @@ public class FlowEntity {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "extension_id")
     private Long id;
 
     @Column(name = "extension_name", nullable = false, unique = true)

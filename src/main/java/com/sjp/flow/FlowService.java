@@ -32,16 +32,24 @@ public class FlowService {
 		}
 		else {
             FlowEntity newEntity = FlowEntity.builder()
-                                             .extensionName(newExtension)
+                                             .extensionName(newExtension.toLowerCase())
                                              .type(FlowExtensionType.CUSTOM)
                                              .build();
 			flowRepository.save(newEntity);
 		}
     }
 
-    public void checkExtension(String extension) {
+    public void checkExtension(String extension, List<String> selectedExtensions) {
+        if (extension == null || !extension.contains(".")) {
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION);
+        }
         String fileExtension = extension.substring(extension.lastIndexOf(".") + 1).toLowerCase();
-        if (!flowRepository.existsByExtensionName(fileExtension)) {
+        
+        if (flowRepository.existsByExtensionName(fileExtension)) {
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION);
+        }
+
+        if (selectedExtensions != null && selectedExtensions.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileExtension))) {
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION);
         }
     }
@@ -59,13 +67,6 @@ public class FlowService {
                 .map(FlowEntity::getExtensionName)
                 .collect(Collectors.toList());
     }
-    //     fixedExtensions.add("bat");
-    //     fixedExtensions.add("cmd");
-    //     fixedExtensions.add("com");
-    //     fixedExtensions.add("cpl");
-    //     fixedExtensions.add("exe");
-    //     fixedExtensions.add("scr");
-    //     fixedExtensions.add("js");
 
     public List<FlowEntity> getExtensionLists() {
         List<FlowEntity> ExtensionLists = flowRepository.findAll();
