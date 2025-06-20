@@ -12,8 +12,8 @@
         </div>
         <form method="POST" action="/selectExtension">
             <p>고정 확장자: </p>
-            <div class="extensionItem" th:each="extension : ${extensions}" th:if="${extension.type.name() == 'FIXED'}">
-                <input type="checkbox" name="fixedSelected" th:value="${extension.extensionName}" th:checked="${selectedExtensions.contains(extension.extensionName)}" onclick="this.form.submit()">
+            <div class="extensionItem" th:each="extension : ${fixedExtensions}" th:if="${extension.type.name() == 'FIXED'}">
+                <input type="checkbox" name="fixedSelected" th:value="${extension.extensionName}" th:checked="${extension.checked}" onclick="this.form.submit()">
                 <label th:text="${extension.extensionName}"></label>
             </div>
         </form>
@@ -25,11 +25,9 @@
         <div>
             <form method="POST" action="/removeExtension">
                 <p>커스텀 확장자: </p>
-                <div th:each="extension : ${extensions}">
-                    <div th:if="${extension.type.name() == 'CUSTOM'}" class="extensionItem">
-                        <input type="checkbox" name="addedExtension" th:value="${extension.extensionName}" onclick="this.form.submit()">
-                        <label th:text="${extension.extensionName}" class="extensionLabel"></label>
-                    </div>
+                <div  class="extensionItem" th:each="extension : ${customExtensions}">
+                    <button type="submit" name="customExtensions" th:value="${extension.extensionName}" class="deleteBtn">X</button>
+                    <label th:text="${extension.extensionName}" class="extensionLabel"></label>
                 </div>
             </form>
         </div>

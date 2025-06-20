@@ -8,9 +8,10 @@ public class CustomException extends RuntimeException {
     private String errorMessage;
     private String targetView;
 
-    public CustomException(CustomErrorCode errorCode) {
+    public CustomException(CustomErrorCode errorCode, String targetView) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         this.errorMessage = errorCode.getMessage();
+        this.targetView = targetView;
     }
 }

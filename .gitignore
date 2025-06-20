@@ -43,3 +43,4 @@ out/
 *.log
 .env
 src/main/resources/application.properties
+Dockerfile

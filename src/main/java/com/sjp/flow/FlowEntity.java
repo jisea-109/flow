@@ -31,5 +31,12 @@ public class FlowEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private FlowExtensionType type;
+    private FlowExtensionType type; // 고정 확장자 또는 커스텀 확장자
+
+    @Column(name = "status")
+    private boolean checked; // 커스텀 확장자 = true, 선택된 고정 확장자 = true, 선택안된 고정 확장자 = false
+
+    public void setChecked (boolean checked) { // 고정 확장자 setter
+        this.checked = checked;
+    }
 }
