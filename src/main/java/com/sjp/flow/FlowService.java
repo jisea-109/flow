@@ -26,12 +26,6 @@ public class FlowService {
         if (exists) { // 추가할 확장자가 이미 있을 시
             throw new CustomException(CustomErrorCode.DUPLICATE_EXTENSION_FOUND, "main");
         }
-        if (!newExtension.toLowerCase().matches("^[a-zA-Z0-9/]+$") || newExtension.contains("//")) { // 특수문자나 파일변형 방지 체크
-			throw new CustomException(CustomErrorCode.CHARACTER_NOT_ALLOWED, "main");
-		}
-		else if (newExtension.toLowerCase().length() > 20) { // 확장자 이름 20글자 초과 시 에러
-			throw new CustomException(CustomErrorCode.EXTENSION_LENGTH, "main");
-		}
 		else if (flowRepository.count() >= 200) { // 확장자 개수가 200개가 넘을 시 에러
 			throw new CustomException(CustomErrorCode.EXTENSION_MAX, "main");
 		}
@@ -51,16 +45,29 @@ public class FlowService {
      * @param selectedExtensions 선택된 고정 확장자와 커스텀 확장자 모음
      */
     public void checkExtension(String filename) {
+
         if (filename == null || !filename.contains(".")) { // 만약 파일 이름이 없거나 '.' 자체가 없을 시
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION, "upload");
         }
+        else if (filename.startsWith(".") || filename.endsWith(".")) { // 확장자 회피 시도하는 파일 방지
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION, "upload");
+        }
+
         String fileExtension = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(); // 파일 이름 . 뒤로 전체 소문자
 
-        List<String> selectedExtensions = getCheckedExtension(); // 체크된 확장자와 커스텀 확장자 둘 다 가져옴
+        if (!fileExtension.toLowerCase().matches("^[a-zA-Z0-9]+$") || fileExtension.contains("//")) { // 특수문자나 파일변형 방지 체크
+			throw new CustomException(CustomErrorCode.CHARACTER_NOT_ALLOWED, "upload");
+		}
+		else if (fileExtension.toLowerCase().length() > 20) { // 확장자 이름 20글자 초과 시 에러
+			throw new CustomException(CustomErrorCode.EXTENSION_LENGTH, "upload");
+		}
+        
+        List<String> selectedExtensions = getCheckedExtension(); // 체크된 확장자와 커스텀 확장자 둘 다 가져오기
 
         if (selectedExtensions.contains(fileExtension)) { // 만약 파일 확장자가 포함이 될 시 에러
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION, "upload");
         }
+        
     }
 
     /** 커스텀 확장자 제거

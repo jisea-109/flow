@@ -44,3 +44,4 @@ out/
 .env
 src/main/resources/application.properties
 Dockerfile
+cert/
