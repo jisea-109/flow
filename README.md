@@ -1,25 +1,23 @@
-# flow
-📦main
- ┣ 📂java
- ┃ ┗ 📂com
- ┃ ┃ ┗ 📂sjp
- ┃ ┃ ┃ ┗ 📂flow
- ┃ ┃ ┃ ┃ ┣ 📂CustomException
- ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomErrorCode.java
- ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomException.java
- ┃ ┃ ┃ ┃ ┃ ┗ 📜CustomExceptionHandler.java
- ┃ ┃ ┃ ┃ ┣ 📜FlowApplication.java
- ┃ ┃ ┃ ┃ ┣ 📜FlowController.java
- ┃ ┃ ┃ ┃ ┣ 📜FlowEntity.java
- ┃ ┃ ┃ ┃ ┣ 📜FlowExtensionType.java
- ┃ ┃ ┃ ┃ ┣ 📜FlowRepository.java
- ┃ ┃ ┃ ┃ ┗ 📜FlowService.java
- ┗ 📂resources
- ┃ ┣ 📂static
- ┃ ┃ ┗ 📜style.css
- ┃ ┣ 📂templates
- ┃ ┃ ┣ 📜main.html
- ┃ ┃ ┗ 📜upload.html
- ┃ ┗ 📜application.
+## 파일 구조
+![Image](https://github.com/user-attachments/assets/26f6b8d3-9270-4768-b2ba-5cb2869f1cdc)
+
+<hr>
+
+| **기술 스택** |
+| ----- |
+| **프론트**: HTML, CSS, Thymeleaf |
+| **백엔드**: SpringBoot, JPA, Mysql | 
+| **Deploy**: Gradle, AWS, Docker |
+
+### 파일 확장자 차단 할 때 고려한 점
+
+1. 커스텀 확장자를 추가했을 때 중복된 확장자 방지를 위해서 이미 DB에 있는 확장자면 추가되지 않도록 처리하였습니다.
  
+2. 파일 업로드 시 HTML 인젝션 공격과 확장자 회피를 방지하기 위해 특수문자를 검증하고, 파일명에 .이 맨 앞이나 뒤에 오는 경우를 확인하였습니다.
  
+3. 커스텀 확장자를 저장할 때 모두 소문자로 저장하고 업로드하는 파일 또한 소문자로 변환해서 체크하기
+소문자로 통일을 해야 같은 문자임에도 확인을 못하는 경우를 대비하였습니다.
+ 
+4. 파일을 업로드할 때 파일 타입 위장을 대비해서 파일 확장자가 없는지를 확인하게끔 하였습니다.
+
+5. 확장자 최대 길이가 20이 넘지 않도록 하였습니다.

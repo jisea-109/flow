@@ -29,6 +29,9 @@ public class FlowService {
 		else if (flowRepository.count() >= 200) { // 확장자 개수가 200개가 넘을 시 에러
 			throw new CustomException(CustomErrorCode.EXTENSION_MAX, "main");
 		}
+        else if (newExtension.toLowerCase().length() > 20) { // 확장자 이름 20글자 초과 시 에러
+			throw new CustomException(CustomErrorCode.EXTENSION_LENGTH, "main");
+		}
 		else { // 아무런 문제가 없을 시 커스텀 확장자로 저장. 단, 소문자로 저장하고 커스텀 확장자는 Default가 checked = true이다.
             FlowEntity newEntity = FlowEntity.builder()
                                              .extensionName(newExtension.toLowerCase())
