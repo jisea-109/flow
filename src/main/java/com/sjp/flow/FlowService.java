@@ -27,10 +27,13 @@ public class FlowService {
             throw new CustomException(CustomErrorCode.DUPLICATE_EXTENSION_FOUND, "main");
         }
 		else if (flowRepository.count() >= 200) { // 확장자 개수가 200개가 넘을 시 에러
-			throw new CustomException(CustomErrorCode.EXTENSION_MAX, "main");
+			throw new CustomException(CustomErrorCode.EXTENSION_MAXIMUM, "main");
 		}
         else if (newExtension.toLowerCase().length() > 20) { // 확장자 이름 20글자 초과 시 에러
 			throw new CustomException(CustomErrorCode.EXTENSION_LENGTH, "main");
+		}
+        else if (!newExtension.toLowerCase().matches("^[a-zA-Z0-9]+$") || newExtension.contains("//") || newExtension.isBlank()) { // 특수문자나 파일변형 방지 체크
+			throw new CustomException(CustomErrorCode.CHARACTER_NOT_ALLOWED, "main");
 		}
 		else { // 아무런 문제가 없을 시 커스텀 확장자로 저장. 단, 소문자로 저장하고 커스텀 확장자는 Default가 checked = true이다.
             FlowEntity newEntity = FlowEntity.builder()
@@ -49,7 +52,7 @@ public class FlowService {
      */
     public void checkExtension(String filename) {
 
-        if (filename == null || !filename.contains(".")) { // 만약 파일 이름이 없거나 '.' 자체가 없을 시
+        if (filename == null || !filename.contains(".") || filename.isBlank()) { // 만약 파일 이름이 없거나 '.' 자체가 없을 시
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_FILE_EXTENSION, "upload");
         }
         else if (filename.startsWith(".") || filename.endsWith(".")) { // 확장자 회피 시도하는 파일 방지

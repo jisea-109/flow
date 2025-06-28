@@ -2,7 +2,6 @@ package com.sjp.flow;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/")
 @Controller
@@ -84,10 +82,12 @@ public class FlowController {
     @PostMapping("uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         String fileName = file.getOriginalFilename(); // 파일 이름
+
         if (fileName == null || fileName.isBlank()) { // 만약 파일이 비었거나 파일 이름이 공백일 시 등록하라는 메세지 표시
             redirectAttributes.addFlashAttribute("message", "업로드할 파일을 선택하세요.");
             return "redirect:/uploadPage";
         }
+
         flowService.checkExtension(fileName); // 파일 확장자 확인, 부적절한 확장자일 시 에러
         redirectAttributes.addFlashAttribute("message", "성공적으로 업로드하셨습니다.");
         return "redirect:/uploadPage";

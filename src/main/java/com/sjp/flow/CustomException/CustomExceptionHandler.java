@@ -31,7 +31,7 @@ public class CustomExceptionHandler {
             List<FlowEntity> customExtensions = flowService.getCustomExtension();
 
             model.addAttribute("fixedExtensions", fixedExtensions);
-            model.addAttribute("selectedExtensions", customExtensions);
+            model.addAttribute("customExtensions", customExtensions);
         }
 
         if ("upload".equals(viewName)) { // 만약 html 이름이 uploaad일 시 선택된 고정 확장자와 커스텀 확장자 전달
